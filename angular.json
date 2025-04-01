@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "echo-assistant": {
+      "projectType": "library",
+      "root": "projects/echo-assistant",
+      "sourceRoot": "projects/echo-assistant/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/echo-assistant/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/echo-assistant/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/echo-assistant/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/echo-assistant/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

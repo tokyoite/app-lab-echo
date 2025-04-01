@@ -1,0 +1,124 @@
+<div
+  class="echo-bottom-overlay"
+  [class.active]="isOpen"
+  [class.minimized]="isMinimized"
+>
+  <!-- Hidden audio element for voice output -->
+  <audio #echoAudio autoplay style="display: none;"></audio>
+  
+  <div class="echo-handle" (click)="handleClick($event)">
+    <div class="handle-dots"><span></span><span></span><span></span></div>
+    <div class="echo-title">
+      {{ configService.config.dialogTitle || "Echo AI Assistant" }}
+    </div>
+    <button class="echo-minimize" (click)="minimize($event)">−</button>
+  </div>
+
+  <div class="echo-content">
+    <div class="echo-side-panel">
+      <echo-tesseract-animation></echo-tesseract-animation>
+      <div class="echo-status">{{ status }}</div>
+    </div>
+
+    <div class="echo-main-panel">
+      <div class="echo-body" #echoBody>
+        <div
+          *ngFor="let message of messages"
+          class="echo-message"
+          [class.echo]="message.role === 'assistant'"
+          [class.user]="message.role === 'user'"
+        >
+          <div class="echo-message-content">
+            {{ message.content }}
+          </div>
+        </div>
+
+        <div class="waiting-response" *ngIf="isProcessing">
+          <div class="waiting-text">{{ waitingText }}</div>
+        </div>
+      </div>
+
+      <div class="echo-input-container">
+        <input
+          type="text"
+          class="echo-input"
+          [(ngModel)]="userInput"
+          (keyup.enter)="sendMessage()"
+          placeholder="Type your message or click the mic to speak..."
+        />
+        <button class="echo-send" (click)="sendMessage()">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M22 2L11 13"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M22 2L15 22L11 13L2 9L22 2Z"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <button
+          class="echo-mic"
+          [class.listening]="isListening"
+          (click)="toggleSpeechRecognition()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M19 10v2a7 7 0 0 1-14 0v-2"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <line
+              x1="12"
+              y1="19"
+              x2="12"
+              y2="23"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <line
+              x1="8"
+              y1="23"
+              x2="16"
+              y2="23"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
